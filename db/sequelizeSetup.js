@@ -1,23 +1,23 @@
-// CONFIG DB
+
 const { Sequelize } = require('sequelize');
-const bcrypt = require('bcrypt')
-const RecetteModel = require('../models/recetteModel')
-const UserModel = require('../models/userModel')
-const RoleModel = require('../models/roleModel')
+const bcrypt = require('bcrypt');
+
+const RecetteModel = require('../models/recetteModel');
+const UserModel = require('../models/userModel');
+const RoleModel = require('../models/roleModel');
+const ReviewModel = require('../models/reviewModel');
+const CategorieModel = require('../models/carégorieModel');
+const IngredientModel = require('../models/ingredientModel');
+const RecetteIngredientModel = require('../models/recetteIngredient');
+
 const mockRecettes = require('./recette');
 const mockUsers = require('./users');
-const reviewModel = require('../models/reviewModel');
-const CategorieModel = require('../models/carégorieModel')
-const IngredientsModel = require("../models/ingredientModel")
-const mockIngredients = require("./ingredients")
-const RecetteIngredientModel = require("../models/recetteIngredient")
-const mockRecetteIngredient = require("./recetteIngredient")
-const mockCategorie = require("./catégorie")
+const mockIngredients = require('./ingredients');
+const mockRecetteIngredient = require('./recetteIngredient');
+const mockCategorie = require('./catégorie');
+
 const env = process.env.NODE_ENV;
 const config = require('../configs/db-config.json')[env];
-
-
-// Option: Passing parameters separately (other dialects)
 
 const sequelize = new Sequelize(config.database, config.username, config.password, {
     host: config.host,
@@ -25,114 +25,85 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
     logging: false
 });
 
-const Recette = RecetteModel(sequelize);
-const User = UserModel(sequelize);
-const Role = RoleModel(sequelize);
-const Review = reviewModel(sequelize);
-const Categorie = CategorieModel(sequelize);
-const Ingredients = IngredientsModel(sequelize);
-const RecetteIngredient = RecetteIngredientModel(sequelize)
+const models = {
+    Recette: RecetteModel(sequelize, Sequelize.DataTypes),
+    User: UserModel(sequelize, Sequelize.DataTypes),
+    Role: RoleModel(sequelize, Sequelize.DataTypes),
+    Review: ReviewModel(sequelize, Sequelize.DataTypes),
+    Categorie: CategorieModel(sequelize, Sequelize.DataTypes),
+    Ingredient: IngredientModel(sequelize, Sequelize.DataTypes),
+    RecetteIngredient: RecetteIngredientModel(sequelize, Sequelize.DataTypes),
+};
 
-// Par défaut, tous les utilisateurs créés sont "user"
-Role.hasMany(User, {
-    foreignKey: {
-        defaultValue: 3,
-    },
+// Setup associations
+Object.keys(models).forEach(modelName => {
+    if (models[modelName].associate) {
+        models[modelName].associate(models);
+    }
 });
-User.belongsTo(Role);
 
-User.hasMany(Recette)
-Recette.belongsTo(User)
-
-Recette.hasMany(Review, {
-    foreignKey: {
-        allowNull: false,
-    },
-})
-Review.belongsTo(Recette)
-
-User.hasMany(Review, {
-    foreignKey: {
-        allowNull: false,
-    },
-})
-Review.belongsTo(User)
-
-Categorie.hasMany(Recette, {
-    foreignKey: {
-        allowNull: false,
-    },
-})
-Recette.belongsTo(Categorie)
-
-Recette.hasMany(RecetteIngredient)
-RecetteIngredient.belongsTo(Recette)
-
-Ingredients.hasMany(RecetteIngredient)
-RecetteIngredient.belongsTo(Ingredients)
-
-
-const resetDb = process.env.NODE_ENV === "development"
+const resetDb = process.env.NODE_ENV === 'development';
 
 sequelize.sync({ force: resetDb })
-    .then(() => {
-        mockRecettes.forEach(recette => {
-            Recette.create(recette)
-                .then()
-                .catch(error => {
-                    console.log(error)
-                })
-        })
+    .then(async () => {
+        try {
+            // Insert categories first
+            await Promise.all(mockCategorie.map(categorie => models.Categorie.create(categorie)));
 
-        mockIngredients.forEach(ingredients => {
-            Ingredients.create(ingredients)
-                .then()
-                .catch(error => {
-                    console.log(error)
-                })
-        })
+            // Insert ingredients
+            await Promise.all(mockIngredients.map(ingredient => models.Ingredient.create(ingredient)));
 
-        Role.create({ id: 1, label: "superadmin" })
-        Role.create({ id: 2, label: "admin" })
-        Role.create({ id: 3, label: "user" })
+            // Insert roles
+            await models.Role.bulkCreate([
+                { id: 1, label: 'superadmin' },
+                { id: 2, label: 'admin' },
+                { id: 3, label: 'user' }
+            ]);
 
-        mockCategorie.forEach(categorie => {
-            Categorie.create(categorie)
-                .then()
-                .catch(error => {
-                    console.log(error)
-                })
-        })
+            // Insert users
+            await Promise.all(mockUsers.map(async user => {
+                const hash = await bcrypt.hash(user.password, 10);
+                user.password = hash;
+                return models.User.create(user);
+            }));
 
-        mockRecetteIngredient.forEach(recetteIngredient => {
-            RecetteIngredient.create(recetteIngredient)
-                .then()
-                .catch(error => {
-                    console.log(error)
-                })
-        })
+            // Insert recettes
+            await Promise.all(mockRecettes.map(recette => models.Recette.create(recette)));
 
-        // Categorie.create({ id: 1, name: "entrées" })
-        // Categorie.create({ id: 2, name: "plats" })
-        // Categorie.create({ id: 3, name: "desserts" })
+            // Insert recette ingredients
+            for (const recetteIngredient of mockRecetteIngredient) {
+                const { RecetteId, IngredientId } = recetteIngredient;
+                const recetteExists = await models.Recette.findByPk(RecetteId);
+                const ingredientExists = await models.Ingredient.findByPk(IngredientId);
 
-        mockUsers.forEach(async user => {
-            const hash = await bcrypt.hash(user.password, 10)
-            user.password = hash
-            User.create(user)
-                .then()
-                .catch(error => {
-                    console.log(error)
-                })
-        })
+                if (recetteExists && ingredientExists) {
+                    const existingEntry = await models.RecetteIngredient.findOne({
+                        where: { RecetteId, IngredientId }
+                    });
+
+                    if (!existingEntry) {
+                        await models.RecetteIngredient.create(recetteIngredient);
+                    } else {
+                        console.log(`RecetteIngredient already exists for RecetteId: ${RecetteId}, IngredientId: ${IngredientId}`);
+                    }
+                } else {
+                    console.log(`Recette or Ingredient does not exist for RecetteId: ${RecetteId}, IngredientId: ${IngredientId}`);
+                }
+            }
+        } catch (error) {
+            console.error('Error inserting mock data:', error);
+        }
     })
-    .catch((error) => {
-        console.log(error)
-    })
-
+    .catch(error => {
+        console.error('Error synchronizing the database:', error);
+    });
 
 sequelize.authenticate()
     .then(() => console.log('La connexion à la base de données a bien été établie.'))
-    .catch(error => console.error(`Impossible de se connecter à la base de données ${error}`))
+    .catch(error => console.error(`Impossible de se connecter à la base de données: ${error}`));
 
-module.exports = { sequelize, Recette, User, Role, Review, Ingredients, Categorie, RecetteIngredient }
+module.exports = { sequelize, ...models };
+
+
+
+

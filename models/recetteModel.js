@@ -1,10 +1,11 @@
+
+
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-    return sequelize.define(
+    const Recette = sequelize.define(
         'Recette',
         {
-            // Model attributes are defined here
             title: {
                 type: DataTypes.STRING,
                 allowNull: false,
@@ -16,41 +17,41 @@ module.exports = (sequelize) => {
                     }
                 },
             },
-
             servings: {
                 type: DataTypes.STRING,
                 allowNull: false,
-
-
             },
-            tempsTotal: {
+
+            difficulty_level: {
                 type: DataTypes.STRING,
                 allowNull: false,
-
             },
-            diffculty_level: {
-                type: DataTypes.STRING,
-                allowNull: false,
-
-            },
-            perparation: {
+            preparation: {
                 type: DataTypes.TEXT,
                 allowNull: false,
-
             },
             descriptionProduit: {
                 type: DataTypes.TEXT,
                 allowNull: false,
-
             },
             imageUrl: {
                 type: DataTypes.STRING,
-
+            },
+            tempsTotal: {
+                type: DataTypes.STRING,
+                allowNull: false,
             },
         },
         {
-            onDelete: 'CASCADE'
+            onDelete: 'CASCADE',
             // Other model options go here
-        },
+        }
     );
-}
+
+    Recette.associate = (models) => {
+        Recette.belongsTo(models.Categorie, { foreignKey: { allowNull: false } });
+        Recette.hasMany(models.RecetteIngredient, { foreignKey: { allowNull: false } });
+    };
+
+    return Recette;
+};

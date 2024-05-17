@@ -7,6 +7,7 @@ const createRecetteIngredient = async (req, res) => {
         const newRecetteIngredient = await RecetteIngredient.create(req.body)
         res.status(201).json({ data: newRecetteIngredient })
     } catch (error) {
+        console.log(error);
         errorHandler(error, res)
     }
 }

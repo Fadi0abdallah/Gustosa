@@ -1,15 +1,23 @@
+
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-    return sequelize.define(
-        'Ingredients',
-
-        {
-            nom: {
-                type: DataTypes.STRING,
-            },
-
+    const Ingredient = sequelize.define('Ingredient', {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        nom: {
+            type: DataTypes.STRING,
+            allowNull: false
         }
-    )
-}
+    });
+
+    Ingredient.associate = (models) => {
+        Ingredient.hasMany(models.RecetteIngredient, { foreignKey: { allowNull: false } });
+    };
+
+    return Ingredient;
+};
 
