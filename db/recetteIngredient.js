@@ -505,78 +505,307 @@ const recetteingredients = [
         RecetteId: 9,
         IngredientId: 18
     },
-    // {
-    //     quantity: "",
-    //     unit: "",
-    //     RecetteId: 10,
-    //     IngredientId: 
-    // },
-    // {
-    //     quantity: "",
-    //     unit: "",
-    //     RecetteId: 10,
-    //     IngredientId: 
-    // },
-    // {
-    //     quantity: "",
-    //     unit: "",
-    //     RecetteId: 10,
-    //     IngredientId: 
-    // },
-    // {
-    //     quantity: "",
-    //     unit: "",
-    //     RecetteId: 10,
-    //     IngredientId: 
-    // },
-    // {
-    //     quantity: "",
-    //     unit: "",
-    //     RecetteId: 10,
-    //     IngredientId: 
-    // },
-    // {
-    //     quantity: "",
-    //     unit: "",
-    //     RecetteId: 10,
-    //     IngredientId: 
-    // },
-    // {
-    //     quantity: "",
-    //     unit: "",
-    //     RecetteId: 10,
-    //     IngredientId: 
-    // },
-    // {
-    //     quantity: "",
-    //     unit: "",
-    //     RecetteId: 10,
-    //     IngredientId: 
-    // },
-    // {
-    //     quantity: "",
-    //     unit: "",
-    //     RecetteId: 10,
-    //     IngredientId: 
-    // },
-    // {
-    //     quantity: "",
-    //     unit: "",
-    //     RecetteId: 10,
-    //     IngredientId: 
-    // },
-    // {
-    //     quantity: "",
-    //     unit: "",
-    //     RecetteId: 10,
-    //     IngredientId: 
-    // },
-    // {
-    //     quantity: "",
-    //     unit: "",
-    //     RecetteId: 10,
-    //     IngredientId: 
-    // },
+    {
+        quantity: "700",
+        unit: "g",
+        RecetteId: 10,
+        IngredientId: 37
+    },
+    {
+        quantity: "75",
+        unit: "g",
+        RecetteId: 10,
+        IngredientId: 63
+    },
+    {
+        quantity: "45",
+        unit: "cl",
+        RecetteId: 10,
+        IngredientId: 90
+    },
+    {
+        quantity: "5",
+        unit: "cl",
+        RecetteId: 10,
+        IngredientId: 18
+    },
+    {
+        quantity: "1",
+        unit: "g",
+        RecetteId: 10,
+        IngredientId: 64
+    },
+    {
+        quantity: "25",
+        unit: "g",
+        RecetteId: 10,
+        IngredientId: 59
+    },
+    {
+        quantity: "x 1",
+        unit: "pâton",
+        RecetteId: 12,
+        IngredientId: 74
+    },
+    {
+        quantity: "120",
+        unit: "g",
+        RecetteId: 12,
+        IngredientId: 50
+    },
+    {
+        quantity: "70",
+        unit: "g",
+        RecetteId: 12,
+        IngredientId: 71
+    },
+    {
+        quantity: "100",
+        unit: "g",
+        RecetteId: 12,
+        IngredientId: 58
+    },
+    {
+        quantity: "40",
+        unit: "g",
+        RecetteId: 12,
+        IngredientId: 23
+    },
+    {
+        quantity: "100",
+        unit: "g",
+        RecetteId: 12,
+        IngredientId: 73
+    },
+    {
+        quantity: "25",
+        unit: "g",
+        RecetteId: 12,
+        IngredientId: 38
+    },
+    {
+        quantity: "x 1",
+        unit: "QB",
+        RecetteId: 12,
+        IngredientId: 4
+    },
+    {
+        quantity: "5",
+        unit: "cl ",
+        RecetteId: 12,
+        IngredientId: 18
+    },
+    {
+        quantity: "170",
+        unit: "g",
+        RecetteId: 13,
+        IngredientId: 75
+    },
+    {
+        quantity: "140",
+        unit: "g",
+        RecetteId: 13,
+        IngredientId: 38
+    },
+    {
+        quantity: "x 5",
+        unit: "",
+        RecetteId: 13,
+        IngredientId: 7
+    },
+    {
+        quantity: "120",
+        unit: "g",
+        RecetteId: 13,
+        IngredientId: 76
+    },
+    {
+        quantity: "70",
+        unit: "g",
+        RecetteId: 13,
+        IngredientId: 37
+    },
+    {
+        quantity: "300",
+        unit: "g",
+        RecetteId: 13,
+        IngredientId: 78
+    },
+    {
+        quantity: "30",
+        unit: "g",
+        RecetteId: 13,
+        IngredientId: 77
+    },
+    {
+        quantity: "x 1",
+        unit: "QB",
+        RecetteId: 13,
+        IngredientId: 79
+    },
+    {
+        quantity: "x 1",
+        unit: "pincée",
+        RecetteId: 13,
+        IngredientId: 59
+    },
+    {
+        quantity: "x 1",
+        unit: "pâton",
+        RecetteId: 11,
+        IngredientId: 74
+    },
+    {
+        quantity: "100",
+        unit: "g",
+        RecetteId: 11,
+        IngredientId: 65
+    },
+    {
+        quantity: "150",
+        unit: "g",
+        RecetteId: 11,
+        IngredientId: 21
+    },
+    {
+        quantity: "125",
+        unit: "g",
+        RecetteId: 11,
+        IngredientId: 50
+    },
+    {
+        quantity: "x 1",
+        unit: "quinzaine",
+        RecetteId: 11,
+        IngredientId: 66
+    },
+    {
+        quantity: "x 1",
+        unit: "QB",
+        RecetteId: 11,
+        IngredientId: 67
+    },
+    {
+        quantity: "x 1",
+        unit: "",
+        RecetteId: 11,
+        IngredientId: 68
+    },
+    {
+        quantity: "2",
+        unit: "c",
+        RecetteId: 11,
+        IngredientId: 69
+    },
+    {
+        quantity: "5",
+        unit: "cl",
+        RecetteId: 11,
+        IngredientId: 18
+    },
+    {
+        quantity: "250",
+        unit: "g",
+        RecetteId: 14,
+        IngredientId: 80
+    },
+    {
+        quantity: "x4",
+        unit: "",
+        RecetteId: 14,
+        IngredientId: 85
+    },
+    {
+        quantity: "120",
+        unit: "g",
+        RecetteId: 14,
+        IngredientId: 76
+    },
+    {
+        quantity: "100",
+        unit: "g",
+        RecetteId: 14,
+        IngredientId: 81
+    },
+    {
+        quantity: "x 10",
+        unit: "tasses",
+        RecetteId: 14,
+        IngredientId: 82
+    },
+    {
+        quantity: "x 1",
+        unit: "boîte de 125 g ",
+        RecetteId: 14,
+        IngredientId: 83
+    },
+    {
+        quantity: "x 1",
+        unit: "QB",
+        RecetteId: 14,
+        IngredientId: 84
+    },
+    {
+        quantity: "450",
+        unit: "g",
+        RecetteId: 15,
+        IngredientId: 78
+    },
+    {
+        quantity: "x 1",
+        unit: "",
+        RecetteId: 15,
+        IngredientId: 86
+    },
+    {
+        quantity: "50",
+        unit: "g",
+        RecetteId: 15,
+        IngredientId: 76
+    },
+    {
+        quantity: "4",
+        unit: "g",
+        RecetteId: 15,
+        IngredientId: 87
+    },
+    {
+        quantity: "4",
+        unit: "c",
+        RecetteId: 15,
+        IngredientId: 88
+    },
+    {
+        quantity: "x 1",
+        unit: "QB",
+        RecetteId: 15,
+        IngredientId: 79
+    },
+    {
+        quantity: "50",
+        unit: "g",
+        RecetteId: 15,
+        IngredientId: 37
+    },
+
+    {
+        quantity: "40",
+        unit: "g",
+        RecetteId: 15,
+        IngredientId: 38
+    },
+    {
+        quantity: "x 1",
+        unit: "poignée",
+        RecetteId: 15,
+        IngredientId: 89
+    },
+    {
+        quantity: "1",
+        unit: "QB",
+        RecetteId: 15,
+        IngredientId: 59
+    },
 
 
 
