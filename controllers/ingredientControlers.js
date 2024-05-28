@@ -1,19 +1,20 @@
-const { Ingredients } = require('../db/sequelizeSetup')
+const { Ingredient } = require('../db/sequelizeSetup')
 const { errorHandler } = require('../errorHandler/errorHandler')
 
 const findAllIngredients = async (req, res) => {
     // A l'aide de req.query, on ajoute une fonction de recherche de Recette sur critère du nom
     try {
-        const results = await Ingredients.findAll()
+        const results = await Ingredient.findAll()
         res.json({ message: `Il y a ${results.length} ingrédients`, data: results })
     } catch (error) {
+        console.log(error);
         errorHandler(error, res)
     }
 }
 const createIngredient = async (req, res) => {
     try {
         req.body.UserId = req.user.id
-        const newIngredient = await Ingredients.create(req.body)
+        const newIngredient = await Ingredient.create(req.body)
         res.status(201).json({ message: `Un ingrédient a bien été ajouté`, data: newIngredient })
     } catch (error) {
         errorHandler(error, res)
@@ -21,7 +22,7 @@ const createIngredient = async (req, res) => {
 }
 const updateIngredient = async (req, res) => {
     try {
-        const result = await Ingredients.findByPk(req.params.id);
+        const result = await Ingredient.findByPk(req.params.id);
         if (!result) {
             return res.status(404).json({ message: `Le ingrédient n'existe pas` })
         }
@@ -33,7 +34,7 @@ const updateIngredient = async (req, res) => {
 }
 const deleteIngredient = async (req, res) => {
     try {
-        const result = await Ingredients.findByPk(req.params.id);
+        const result = await Ingredient.findByPk(req.params.id);
         if (!result) {
             return res.status(404).json({ message: `Le ingrédient n'existe pas` })
         }
