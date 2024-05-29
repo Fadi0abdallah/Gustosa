@@ -97,9 +97,45 @@ const updateProfile = async (req, res) => {
 
         res.status(201).json({ message: 'Utilisateur modifié', data: result })
     } catch (error) {
+        console.log(error)
         errorHandler(error, res)
     }
 }
+const findProfile = async (req, res) => {
+    try {
+        // En supposant que `req.user.id` est l'ID de l'utilisateur dont vous voulez trouver le profil
+        const userId = req.user.id;
+
+        // Trouver l'utilisateur par son identifiant, y compris son rôle
+        const user = await User.findOne({
+            where: { id: userId },
+            include: Role
+        });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Hash le mot de passe s'il est fourni dans le corps de la requête
+        if (req.body.password) {
+            const hash = await bcrypt.hash(req.body.password, 8);
+            req.body.password = hash;
+        }
+
+        // Vérifier si le RoleId est en cours de modification et renvoyer une erreur si c'est le cas
+        if (req.body.RoleId) {
+            return res.status(403).json({ message: 'Droit non modifiable' });
+        }
+
+        // En supposant que vous souhaitiez envoyer le profil de l'utilisateur en tant que réponse
+        return res.status(200).json(user);
+
+    } catch (error) {
+        console.error(error);
+        errorHandler(error, res);
+    }
+};
+
 
 const deleteProfile = async (req, res) => {
     // 1. récupérer la ligne de l'utilisateur au sein de la table User, sans le req.params.id
@@ -118,4 +154,4 @@ const deleteProfile = async (req, res) => {
 
 
 
-module.exports = { findAllUsers, findUserByPk, createUser, updateProfile, updateUser, deleteUser, deleteProfile }
+module.exports = { findAllUsers, findUserByPk, createUser, updateProfile, updateUser, deleteUser, deleteProfile, findProfile }
