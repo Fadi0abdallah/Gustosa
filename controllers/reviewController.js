@@ -1,4 +1,4 @@
-const { Review } = require("../db/sequelizeSetup")
+const { Review, User } = require("../db/sequelizeSetup")
 const { errorHandler } = require("../errorHandler/errorHandler")
 
 const findAllReviews = async (req, res) => {
@@ -11,9 +11,32 @@ const findAllReviews = async (req, res) => {
     }
 }
 
-const findReviewByPk = (req, res) => {
-    res.json({ message: `Commentaire n°${req.params.id}` })
-}
+const findReviewByPk = async (req, res) => {
+    try {
+        const RecetteId = req.params.RecetteId;  // Use req.params  pour obtenir le RecetteId à partir des paramètres de l'URL
+
+        // Trouver tous les commentaires de RecetteId
+        const results = await Review.findAll({
+            where: { RecetteId: RecetteId },
+            include: [
+                {
+                    model: User,
+                    attributes: ['username']  // Only include the username attribute
+                }
+            ]  // Récupérer tous les avis pour lesquels l'identifiant RecetteId correspond
+        });
+
+        if (!results || results.length === 0) {
+            return res.status(404).json({ message: 'Reviews not found' });
+        }
+
+        return res.status(200).json(results);
+
+    } catch (error) {
+        console.error(error);
+        errorHandler(error, res)
+    }
+};
 
 const createReview = async (req, res) => {
     try {

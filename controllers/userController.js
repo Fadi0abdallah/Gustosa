@@ -1,4 +1,4 @@
-const { User, Role } = require("../db/sequelizeSetup")
+const { User, Role, Recette, Review } = require("../db/sequelizeSetup")
 const bcrypt = require('bcrypt');
 const { errorHandler } = require("../errorHandler/errorHandler")
 
@@ -135,6 +135,57 @@ const findProfile = async (req, res) => {
         errorHandler(error, res);
     }
 };
+const findProfileRecette = async (req, res) => {
+    try {
+        // Use req.params.id to get the user ID from the URL parameters
+        const userId = req.params.id;
+
+        // Find all recipes by the user ID
+        const recipes = await Recette.findAll({
+            where: { UserId: userId },
+        });
+
+        if (!recipes || recipes.length === 0) {
+            return res.status(404).json({ message: 'Recettes not found' });
+        }
+
+        return res.status(200).json(recipes);
+
+    } catch (error) {
+        console.error(error);
+        errorHandler(error, res);
+    }
+};
+const findProfileReview = async (req, res) => {
+    try {
+        // Use req.params.id to get the user ID from the URL parameters
+        const userId = req.params.id;
+
+        // Find all recipes by the user ID
+        const reviews = await Review.findAll({
+            where: { UserId: userId },
+            include: [
+                {
+                    model: Recette,
+                    attributes: ['title']  // Only include the username attribute
+                }
+            ]  // Récupérer tous les avis pour lesquels l'identifiant RecetteId correspon
+        });
+
+        if (!reviews || reviews.length === 0) {
+            return res.status(404).json({ message: 'reviews not found' });
+        }
+
+        return res.status(200).json(reviews);
+
+    } catch (error) {
+        console.error(error);
+        errorHandler(error, res);
+    }
+};
+
+
+
 
 
 const deleteProfile = async (req, res) => {
@@ -154,4 +205,15 @@ const deleteProfile = async (req, res) => {
 
 
 
-module.exports = { findAllUsers, findUserByPk, createUser, updateProfile, updateUser, deleteUser, deleteProfile, findProfile }
+module.exports = {
+    findAllUsers,
+    findUserByPk,
+    createUser,
+    updateProfile,
+    updateUser,
+    deleteUser,
+    deleteProfile,
+    findProfileRecette,
+    findProfile,
+    findProfileReview
+}

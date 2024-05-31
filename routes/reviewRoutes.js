@@ -14,9 +14,13 @@ router
     .post(protect, createReview)
 
 router
-    .route('/:id')
+    .route('/:RecetteId')
 
     .get(findReviewByPk)
+router
+    .route('/:id')
+
+
 
     .put(protect, restrictToOwnUser(Review), updateReview)
 

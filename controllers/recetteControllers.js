@@ -1,5 +1,5 @@
 // const { Op, QueryTypes } = require('sequelize')
-const { Recette, sequelize } = require('../db/sequelizeSetup')
+const { Recette, sequelize, Categorie } = require('../db/sequelizeSetup')
 const { errorHandler } = require('../errorHandler/errorHandler')
 
 const findAllRecettes = async (req, res) => {
@@ -44,6 +44,63 @@ const searchRecettes = async (req, res) => {
 const findRecetteByPk = async (req, res) => {
     try {
         const result = await Recette.findByPk(req.params.id);
+        if (!result) {
+            return res.status(404).json({ message: `Le recette n'existe pas` })
+        }
+        res.json({ message: 'Recette trouvé', data: result })
+    } catch (error) {
+        errorHandler(error, res)
+    }
+}
+const findRecetteByPlat = async (req, res) => {
+    try {
+        const result = await Recette.findAll({
+            where: { CategorieId: 2 },
+            include: [
+                {
+                    model: Categorie,
+                    attributes: ['name']  // Only include the username attribute
+                }
+            ]  // Récupérer tous les avis pour lesquels l'identifiant RecetteId correspon
+        });
+        if (!result) {
+            return res.status(404).json({ message: `Le recette n'existe pas` })
+        }
+        res.json({ message: 'Recette trouvé', data: result })
+    } catch (error) {
+        errorHandler(error, res)
+    }
+}
+const findRecetteByDessert = async (req, res) => {
+    try {
+        const result = await Recette.findAll({
+            where: { CategorieId: 3 },
+            include: [
+                {
+                    model: Categorie,
+                    attributes: ['name']  // Only include the username attribute
+                }
+            ]  // Récupérer tous les avis pour lesquels l'identifiant RecetteId correspon
+        });
+        if (!result) {
+            return res.status(404).json({ message: `Le recette n'existe pas` })
+        }
+        res.json({ message: 'Recette trouvé', data: result })
+    } catch (error) {
+        errorHandler(error, res)
+    }
+}
+const findRecetteByEntree = async (req, res) => {
+    try {
+        const result = await Recette.findAll({
+            where: { CategorieId: 1 },
+            include: [
+                {
+                    model: Categorie,
+                    attributes: ['name']  // Only include the username attribute
+                }
+            ]  // Récupérer tous les avis pour lesquels l'identifiant RecetteId correspon
+        });
         if (!result) {
             return res.status(404).json({ message: `Le recette n'existe pas` })
         }
@@ -112,5 +169,8 @@ module.exports = {
     updateRecette,
     deleteRecette,
     searchRecettes,
-    // findAllRecettesRawSQL
+    // findAllRecettesRawSQL,
+    findRecetteByPlat,
+    findRecetteByEntree,
+    findRecetteByDessert,
 }

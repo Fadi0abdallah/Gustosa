@@ -1,7 +1,7 @@
 
 
 const express = require('express')
-const { findAllUsers, findUserByPk, createUser, updateProfile, updateUser, deleteUser, deleteProfile, findProfile } = require('../controllers/userController')
+const { findAllUsers, findUserByPk, createUser, updateProfile, updateUser, deleteUser, deleteProfile, findProfile, findProfileRecette, findProfileReview } = require('../controllers/userController')
 const { login, logout } = require('../controllers/authController')
 const { protect, restrictTo } = require('../middlewares/auth')
 const router = express.Router()
@@ -16,10 +16,18 @@ router
     .post(createUser)
 
 router
-    .route('/profile/')
+    .route('/profile')
     .get(protect, findProfile)
     .put(protect, updateProfile)
     .delete(protect, deleteProfile)
+
+router
+    .route('/profilerecette/:id')
+    .get(protect, findProfileRecette)
+
+router
+    .route('/profilereview/:id')
+    .get(protect, findProfileReview)
 
 router
     .route('/login')

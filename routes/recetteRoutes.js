@@ -10,7 +10,10 @@ const {
     deleteRecette,
     // findAllRecettesRawSQL,
     // createRecetteWithImg,
-    searchRecettes } = require('../controllers/recetteControllers')
+    searchRecettes,
+    findRecetteByPlat,
+    findRecetteByEntree,
+    findRecetteByDessert } = require('../controllers/recetteControllers')
 const { protect, restrictToOwnUser } = require('../middlewares/auth')
 const multer = require('../middlewares/multer-config')
 const { Recette } = require('../db/sequelizeSetup')
@@ -29,6 +32,17 @@ router
 // router
 //     .route('/withImg')
 //     .post(protect, multer, createRecetteWithImg)
+
+router
+    .route('/plat')
+    .get(findRecetteByPlat)
+router
+    .route('/dessert')
+    .get(findRecetteByDessert)
+
+router
+    .route('/entree')
+    .get(findRecetteByEntree)
 
 router
     .route('/search')
