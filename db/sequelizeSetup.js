@@ -11,7 +11,7 @@ const IngredientModel = require('../models/ingredientModel');
 const RecetteIngredientModel = require('../models/recetteIngredient');
 
 const mockRecettes = require('./recette');
-const mockUsers = require('./users');
+const mockUsers = require('../configs/users');
 const mockIngredients = require('./ingredients');
 const mockRecetteIngredient = require('./recetteIngredient');
 const mockCategorie = require('./catégorie');
