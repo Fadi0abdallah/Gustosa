@@ -41,7 +41,19 @@ app.use('/api/ingredient', ingredientRoutes)
 app.use('/api/recetteingredient', recetteIngredient)
 
 // route de fichiers static
-app.use('/images', express.static(path.join(__dirname, 'images')));
+const fs = require('fs');
+
+
+// Directory path
+const uploadsDir = path.join(__dirname, 'uploads');
+
+// Create uploads directory if it doesn't exist
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir);
+}
+
+
+// app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // const swagger = require('./configs/swagger')
 // swagger(app)

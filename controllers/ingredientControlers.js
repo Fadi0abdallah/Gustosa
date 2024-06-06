@@ -44,11 +44,28 @@ const deleteIngredient = async (req, res) => {
         errorHandler(error, res)
     }
 }
+const searchIngredient = async (req, res) => {
+    // A l'aide de req.query, on ajoute une fonction de recherche de Ingredient sur critère du nom
+    try {
+        const results = await Ingredient.findAll(
+            {
+                where:
+                    { nom: { [Op.like]: `%${req.query.nom}%` } }
+            }
+        )
+        res.json({ message: `Il y a ${results.length} Ingredient`, data: results })
+
+    } catch (error) {
+        errorHandler(error, res)
+    }
+}
+
 
 module.exports = {
     findAllIngredients,
     createIngredient,
     updateIngredient,
-    deleteIngredient
+    deleteIngredient,
+    searchIngredient
 
 }

@@ -15,7 +15,7 @@ const {
     findRecetteByEntree,
     findRecetteByDessert } = require('../controllers/recetteControllers')
 const { protect, restrictToOwnUser } = require('../middlewares/auth')
-const multer = require('../middlewares/multer-config')
+const upload = require('../middlewares/multer-config')
 const { Recette } = require('../db/sequelizeSetup')
 
 router
@@ -23,7 +23,7 @@ router
 
     .get(findAllRecettes)
 
-    .post(protect, multer, createRecette)
+    .post(protect, upload, createRecette);
 
 // router
 //     .route('/rawSQL')

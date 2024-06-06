@@ -29,6 +29,7 @@ const protect = async (req, res, next) => {
         req.user = result
         next()
     } catch (error) {
+        console.log(error);
         return res.status(401).json({ message: "Jeton non valide" })
     }
 }

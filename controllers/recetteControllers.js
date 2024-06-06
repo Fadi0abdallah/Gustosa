@@ -1,4 +1,5 @@
 // const { Op, QueryTypes } = require('sequelize')
+const { Op } = require('sequelize')
 const { Recette, sequelize, Categorie } = require('../db/sequelizeSetup')
 const { errorHandler } = require('../errorHandler/errorHandler')
 
@@ -31,12 +32,13 @@ const searchRecettes = async (req, res) => {
         const results = await Recette.findAll(
             {
                 where:
-                    { name: { [Op.like]: `%${req.query.name}%` } }
+                    { title: { [Op.like]: `%${req.query.title}%` } }
             }
         )
         res.json({ message: `Il y a ${results.length} recettes`, data: results })
 
     } catch (error) {
+        console.log(error);
         errorHandler(error, res)
     }
 }
@@ -109,32 +111,29 @@ const findRecetteByEntree = async (req, res) => {
         errorHandler(error, res)
     }
 }
-
+// 
 const createRecette = async (req, res) => {
-
-
     try {
-        req.body.UserId = req.user.id
-        req.body.imageUrl = `${req.protocol}://${req.get('host')}/image/${req.file.filename}`
-        const newRecette = await Recette.create(req.body)
-        res.status(201).json({ message: `Un recette a bien été ajouté`, data: newRecette })
+        // Set UserId from authenticated user
+        const recetteData = JSON.parse(req.body.recette); // Parse the JSON string
+        recetteData.UserId = req.user.id;
+
+        // Set image URL from the uploaded file
+        if (req.file) {
+            recetteData.imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+        }
+
+        // Create new recette
+        const newRecette = await Recette.create(recetteData);
+        res.status(201).json({
+            message: 'Un recette a bien été ajouté',
+            data: newRecette
+        });
     } catch (error) {
-        errorHandler(error, res)
+        console.log(error);
+        errorHandler(error, res);
     }
-}
-
-// const createRecetteWithImg = async (req, res) => {
-//     console.log(req.protocol, req.get('host'), req.file.filename)
-//     try {
-//         req.body.UserId = req.user.id
-//         req.body.imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-//         const newRecette = await Recette.create(req.body)
-//         res.status(201).json({ message: `Un recette a bien été ajouté`, data: newRecette })
-//     } catch (error) {
-//         errorHandler(error, res)
-//     }
-// }
-
+};
 const updateRecette = async (req, res) => {
     try {
         const result = await Recette.findByPk(req.params.id);

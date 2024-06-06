@@ -9,7 +9,6 @@ module.exports = (sequelize) => {
             title: {
                 type: DataTypes.STRING,
                 allowNull: false,
-                unique: true,
                 validate: {
                     len: {
                         msg: "Le nom doit avoir un nombre de caractères compris entre 3 et 50.",
@@ -24,7 +23,7 @@ module.exports = (sequelize) => {
 
             difficulty_level: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                // allowNull: false,
             },
             preparation: {
                 type: DataTypes.TEXT,
