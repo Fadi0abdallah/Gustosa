@@ -1,7 +1,7 @@
 const express = require('express')
-const { findAllIngredients, createIngredient, updateIngredient, deleteIngredient, } = require('../controllers/ingredientControlers')
+const { findAllIngredients, createIngredient, updateIngredient, deleteIngredient, searchIngredient, } = require('../controllers/ingredientControlers')
 const { protect } = require('../middlewares/auth')
-const { searchRecettes } = require('../controllers/recetteControllers')
+
 const router = express.Router()
 
 router
@@ -11,7 +11,7 @@ router
 
 router
     .route("/search")
-    .get(searchRecettes)
+    .get(searchIngredient)
 
 router
     .route("/:id")

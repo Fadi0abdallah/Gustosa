@@ -2,8 +2,8 @@
 
 const express = require('express')
 const router = express.Router()
-const { protect, restrictToOwnUser } = require('../middlewares/auth')
-const { createReview, findAllReviews, findReviewByPk, updateReview, deleteReview } = require('../controllers/reviewController')
+const { protect, restrictToOwnUser, restrictTo } = require('../middlewares/auth')
+const { createReview, findAllReviews, findReviewByPk, updateReview, deleteReview, findUserInReviews, findReviewByPkAdmin } = require('../controllers/reviewController')
 const { Review } = require('../db/sequelizeSetup')
 
 router
@@ -14,13 +14,20 @@ router
     .post(protect, createReview)
 
 router
+    .route('/admin/reviwes')
+    .get(protect, findUserInReviews)
+
+router
     .route('/:RecetteId')
 
     .get(findReviewByPk)
+
+router
+    .route('/admin/:id')
+
+    .get(protect, findReviewByPkAdmin)
 router
     .route('/:id')
-
-
 
     .put(protect, restrictToOwnUser(Review), updateReview)
 

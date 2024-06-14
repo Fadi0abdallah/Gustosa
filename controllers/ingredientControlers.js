@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const { Ingredient } = require('../db/sequelizeSetup')
 const { errorHandler } = require('../errorHandler/errorHandler')
 
@@ -45,20 +46,18 @@ const deleteIngredient = async (req, res) => {
     }
 }
 const searchIngredient = async (req, res) => {
-    // A l'aide de req.query, on ajoute une fonction de recherche de Ingredient sur critère du nom
     try {
-        const results = await Ingredient.findAll(
-            {
-                where:
-                    { nom: { [Op.like]: `%${req.query.nom}%` } }
+        const searchTerm = req.query.nom || '';
+        const results = await Ingredient.findAll({
+            where: {
+                nom: { [Op.like]: `%${searchTerm}%` }
             }
-        )
-        res.json({ message: `Il y a ${results.length} Ingredient`, data: results })
-
+        });
+        res.json({ message: `Il y a ${results.length} ingrédients trouvés`, data: results });
     } catch (error) {
-        errorHandler(error, res)
+        errorHandler(error, res);
     }
-}
+};
 
 
 module.exports = {

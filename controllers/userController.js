@@ -61,6 +61,7 @@ const updateUser = async (req, res) => {
 
         res.status(201).json({ message: 'Utilisateur modifié', data: result })
     } catch (error) {
+        console.log(error)
         errorHandler(error, res)
     }
 }

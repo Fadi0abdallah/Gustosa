@@ -13,7 +13,8 @@ const {
     searchRecettes,
     findRecetteByPlat,
     findRecetteByEntree,
-    findRecetteByDessert } = require('../controllers/recetteControllers')
+    findRecetteByDessert,
+    findRecetteRandom } = require('../controllers/recetteControllers')
 const { protect, restrictToOwnUser } = require('../middlewares/auth')
 const upload = require('../middlewares/multer-config')
 const { Recette } = require('../db/sequelizeSetup')
@@ -48,12 +49,13 @@ router
     .route('/search')
     .get(searchRecettes)
 
+
 router
     .route('/:id')
 
     .get(findRecetteByPk)
 
-    .put(protect, restrictToOwnUser(Recette), updateRecette)
+    .put(protect, restrictToOwnUser(Recette), upload, updateRecette)
 
     .delete(protect, restrictToOwnUser(Recette), deleteRecette)
 

@@ -43,6 +43,7 @@ const searchRecettes = async (req, res) => {
     }
 }
 
+
 const findRecetteByPk = async (req, res) => {
     try {
         const result = await Recette.findByPk(req.params.id);
@@ -138,14 +139,43 @@ const updateRecette = async (req, res) => {
     try {
         const result = await Recette.findByPk(req.params.id);
         if (!result) {
-            return res.status(404).json({ message: `Le recette n'existe pas` })
+            return res.status(404).json({ message: `Le recette n'existe pas` });
         }
-        await result.update(req.body)
-        res.status(201).json({ message: 'Recette modifié', data: result })
+
+        const recetteData = JSON.parse(req.body.recette);
+        console.log(recetteData);
+        if (req.file) {
+            recetteData.imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+        }
+
+        await result.update(recetteData);
+
+        // Handle ingredients update
+        const ingredients = recetteData.ingredients;
+        if (ingredients && ingredients.length > 0) {
+            for (let ingredient of ingredients) {
+                // Assuming the ingredient object contains an id field
+                const ingredientId = ingredient.id;
+
+                // Update the ingredient using the updateIngredient endpoint
+                await fetch(`http://localhost:5000/api/ingredient/${ingredientId}`, {
+                    method: "PUT",
+                    body: JSON.stringify(ingredient),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+            }
+        }
+
+        res.status(201).json({ message: 'Recette modifié', data: result });
     } catch (error) {
-        errorHandler(error, res)
+        console.log(error);
+        errorHandler(error, res);
     }
-}
+};
+
+
 
 const deleteRecette = async (req, res) => {
     try {
@@ -172,4 +202,5 @@ module.exports = {
     findRecetteByPlat,
     findRecetteByEntree,
     findRecetteByDessert,
+
 }

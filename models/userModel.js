@@ -11,8 +11,8 @@ module.exports = (sequelize) => {
                 unique: true,
                 validate: {
                     len: {
-                        msg: "Le nom d'utilisateur doit avoir un nombre de caractères compris entre 8 et 50.",
-                        args: [3, 50]
+                        msg: "Le nom d'utilisateur doit avoir un nombre de caractères compris entre 3 et 20.",
+                        args: [3, 20]
                     }
                 },
             },
