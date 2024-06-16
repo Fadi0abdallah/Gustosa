@@ -1,5 +1,5 @@
 const express = require('express')
-const { findAllRecettesIngredient, createRecetteIngredient, findRecetteIngredientsByRecetteId, updateRecetteIngredient, findRecetteRandom } = require('../controllers/recetteIngredientController')
+const { findAllRecettesIngredient, createRecetteIngredient, findRecetteIngredientsByRecetteId, updateRecetteIngredient, findRecetteRandom, deleteRecetteIngredient } = require('../controllers/recetteIngredientController')
 const { protect } = require('../middlewares/auth')
 const router = express.Router()
 
@@ -10,11 +10,7 @@ router
 router
     .route('/random')
     .get(findRecetteRandom)
-// router
-//     .route('/:id')
-//     .get(findRecetteIngredientByPk)
 
-// New route to get all RecetteIngredients by RecetteId
 router
     .route('/by-recette/:recetteId')
     .get(findRecetteIngredientsByRecetteId);
@@ -23,6 +19,8 @@ router
     .route('/recetteingredient/:recetteId/:ingredientId')
     .put(protect, updateRecetteIngredient);
 
-
+router
+    .route('/:id')
+    .delete(deleteRecetteIngredient)
 
 module.exports = router

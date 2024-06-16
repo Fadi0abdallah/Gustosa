@@ -75,7 +75,6 @@ const updateRecetteIngredient = async (req, res) => {
 };
 const findRecetteRandom = async (req, res) => {
     try {
-        // Fetch a random RecetteIngredient
         const randomRecetteIngredient = await RecetteIngredient.findOne({
             order: [
                 [Sequelize.fn('RAND')]
@@ -83,7 +82,7 @@ const findRecetteRandom = async (req, res) => {
             include: [
                 {
                     model: Recette,
-                    attributes: ['title', 'imageUrl'],
+                    attributes: ['title', 'imageUrl', 'id'],
                 },
                 {
                     model: Ingredient,
@@ -101,7 +100,18 @@ const findRecetteRandom = async (req, res) => {
         errorHandler(error, res);
     }
 };
-
+const deleteRecetteIngredient = async (req, res) => {
+    try {
+        const result = await RecetteIngredient.findByPk(req.params.id);
+        if (!result) {
+            return res.status(404).json({ message: `Le ingrédient n'existe pas` })
+        }
+        result.destroy()
+        res.status(200).json({ message: 'ingrédient supprimé', data: result })
+    } catch (error) {
+        errorHandler(error, res)
+    }
+}
 
 
 module.exports = {
@@ -110,6 +120,7 @@ module.exports = {
     findRecetteIngredientByPk,
     findRecetteIngredientsByRecetteId,
     updateRecetteIngredient,
-    findRecetteRandom
+    findRecetteRandom,
+    deleteRecetteIngredient
 
 }
